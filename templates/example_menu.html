@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <header>
+    <form action="/to_be_created" method="POST">
+    <p> Question1? </p>
+    <input type="radio" name="q1" value="2">Answer1</input>
+    <input type="radio" name="q1" value="1">Answer2</input>
+    <input type="radio" name="q1" value="0">Answer3</input>
+    <input type="radio" name="q1" value="0">Answer4</input>
+
+    <p> Question2? </p>
+    <input type="radio" name="q2" value="2">Answer1</input>
+    <input type="radio" name="q2" value="1">Answer2</input>
+    <input type="radio" name="q2" value="0">Answer3</input>
+    <input type="radio" name="q2" value="0">Answer4</input>
+
+    <p> Submit </p>
+    <div class="input-group-append">
+      <input class="btn btn-outline-secondary" onSubmit="myFunction()" type="submit" value="Submit!"/>
+    </div>
+    </form>
+    </header>
+    <div class="container">{% block content %} {% endblock %}</div>
+  </body>
+</html>

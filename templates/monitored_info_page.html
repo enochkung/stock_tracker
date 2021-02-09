@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+  {%for stock, info in stocks.items()%}
+  <head>
+    <meta charset="utf-8" />
+    <h1>Stock Information: {{stock}}</h1>
+  </head>
+
+  <body>
+    {% for x in info.keys() %} {{x}} {{info[x]}}<br />
+    {% endfor %}
+  </body>
+  {% endfor %}
+</html>

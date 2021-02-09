@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="A site to track my investments">
+    <meta name="author" content="Enoch Kung">
+
+    <title>Python and Flask based Stock Widget</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link href="{{ url_for('static',    filename='css/site.css') }}" rel="stylesheet">
+  </head>
+
+  <body class="text-center">
+      <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+          <header class="masthead mb-auto">
+            <div class="inner">
+              <h3 class="masthead-brand">Investment Tracker</h3>
+              <nav class="nav nav-masthead justify-content-center">
+                <a class="nav-link active" href="#">Home</a>
+                <nav>
+            </div>
+          </header>
+          <div id="widgetContent">
+            <main role="main" class="inner">
+              <h1 class="cover-heading">Python Trading Platform</h1>
+              <!--<p class="lead">A Python and Flask based Stock Quote Module</p> -->
+              <p>This financial widget was built to track the performance and update your portfolio.</p>
+              <h1 style='text-align:left'> Check Info </h1>
+              
+              <form action='/stock_info' method='POST'>
+              <div class="input-group mb-3">
+                <input name="stock" type="text" class="form-control" placeholder="Enter Stock ETF or Mutual Fund Symbol" aria-label="Stock, ETF or Mutual Fund" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="submit">Search</button>
+                </div>
+              </div>
+              </form>
+
+              <div id="chart_container"></div>
+              <h1 style='text-align:left'> Add to Monitor </h1>
+              <form action='/monitor' method='POST'>
+              <div class="input-group mb-3">
+                <input type="text" name='stock' class="form-control" placeholder="Enter Stock ETF or Mutual Fund Symbol" aria-label="Stock, ETF or Mutual Fund" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="submit">Add</button>
+                </div>
+              </div>
+              </form>
+              <div id="chart_container"></div>
+              <h1 style='text-align:left'> Buy </h1>
+              <form>
+                <label for="fname">Stock or Fund:</label>
+                <input type="text" id="stock" name="stock">
+                <label for="lname">Number of Shares:</label>
+                <input type="text" id="amount" name="amount">
+                <input type="submit" value="Buy">
+             </form>
+             <h1 style='text-align:left'> Sell </h1>
+             <form>
+                <label for="fname">Stock or Fund:</label>
+                <input type="text" id="stock" name="stock">
+                <label for="lname">Number of Shares:</label>
+                <input type="text" id="amount" name="amount">
+                <input type="submit" value="Sell" placeholder="Enter Stock ETF or Mutual Fund Symbol">
+            </form>
+            </main>
+          </div>
+          
+          <footer class="mastfoot mt-auto">
+            <div class="inner">
+              <p>This is created by Maltese Ferret Inc.</a></p>
+            </div>
+          </footer>
+        </div>
+    
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+		<script src="https://code.highcharts.com/modules/exporting.js"></script>
+		<script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+
+    <script src="{{ url_for('static',    filename='scripts/site.js') }}"></script>
+    
+  
+
+  </body>
+</html>
