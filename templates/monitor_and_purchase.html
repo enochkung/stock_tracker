@@ -4,35 +4,22 @@
   $(function () {
     window.setInterval(function () {
       loadNewStock();
-    }, 1000);
+    }, 60000);
 
     function loadNewStock() {
       $.ajax({
-        url: "/update_stock_info",
+        url: "/update_monitor",
         type: "POST",
         dataType: "json",
         success: function (data) {
-          $(sample_table).replaceWith(data);
+          $(monitor_table).replaceWith(data);
         },
       });
     }
   });
 </script>
 
-<!--<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <h1>Stock Information: {{stock}}</h1>
-  </head>
-
-  <body>
-    {% for x in [0,1,2] %} {{labels[x]}} {{stats[x]}}<br />
-    {% endfor %}
-  </body>
-</html>-->
-
-<div id="sample_table">
+<div id="monitor_table">
   <link
     rel="stylesheet"
     href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -58,10 +45,17 @@
   </table>
 
   <script>
-    var myArray = [
-      { stock: "{{stock}}", price: "{{price}}", shares: "0" },
-      //{ stock: "Mila", age: "32", birthdate: "10/1/1989" },
-    ];
+    var myArray = [];
+    // var parsed = JSON.parse("{{mon_dict | tojson}}");
+    var parsed = {{mon_dict|tojson}}
+    const key = Object.keys(parsed)
+    //for (var i = 0; i < 1; i++) {
+    //  myArray[i] = { stock: "{{stock}}", price: parsed['stock'], shares: "0" };
+    //  //{ stock: "Mila", age: "32", birthdate: "10/1/1989" },
+    //}
+    for (var i = 0; i < key.length; i++){
+        myArray[i] = { stock: key[i], price: parsed[key[i]], shares: "0" };
+    }
 
     buildTable(myArray);
 

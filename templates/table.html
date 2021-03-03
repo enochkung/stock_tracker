@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <h1>dynamic table</h1>
+  <table>
+    <tr>
+      {% for header in headings %}
+      <th>{{header}}</th>
+      {% endfor%}
+    </tr>
+    <tr>
+      <td>Enoch Kung</td>
+      <td>Software Engineer</td>
+      <td>42000</td>
+    </tr>
+    <tr>
+      <td>Poppy</td>
+      <td>Nurse</td>
+      <td>10000</td>
+    </tr>
+    <tr>
+      <td>Bunny</td>
+      <td>Pilot</td>
+      <td>100000</td>
+    </tr>
+  </table>
+</html>

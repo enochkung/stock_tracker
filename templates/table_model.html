@@ -1,37 +1,3 @@
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-
-<script>
-  $(function () {
-    window.setInterval(function () {
-      loadNewStock();
-    }, 1000);
-
-    function loadNewStock() {
-      $.ajax({
-        url: "/update_stock_info",
-        type: "POST",
-        dataType: "json",
-        success: function (data) {
-          $(sample_table).replaceWith(data);
-        },
-      });
-    }
-  });
-</script>
-
-<!--<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <h1>Stock Information: {{stock}}</h1>
-  </head>
-
-  <body>
-    {% for x in [0,1,2] %} {{labels[x]}} {{stats[x]}}<br />
-    {% endfor %}
-  </body>
-</html>-->
-
 <div id="sample_table">
   <link
     rel="stylesheet"
@@ -62,8 +28,10 @@
       { stock: "{{stock}}", price: "{{price}}", shares: "0" },
       //{ stock: "Mila", age: "32", birthdate: "10/1/1989" },
     ];
+    var newArray = [{}];
+    newArray[0] = { stock: "{{stock}}", price: "{{price}}", shares: "0" };
 
-    buildTable(myArray);
+    buildTable(newArray);
 
     function buildTable(data) {
       var table = document.getElementById("myTable");
@@ -71,7 +39,7 @@
       for (var i = 0; i < data.length; i++) {
         var row = `<tr>
     			<td>${data[i].stock}</td>
-    			<td>${data[i].price}</td>
+    			<td>${Math.round(100 * data[i].price) / 100}</td>
     			<td>${data[i].shares}</td>
                     <td></td>
     	  </tr>`;
