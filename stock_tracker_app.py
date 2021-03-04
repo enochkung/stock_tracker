@@ -53,44 +53,14 @@ def display_stock_info():
         return render_template("to_be_created.html")
 
 
-@app.route("/stock_info/<stock>")
-def find_stock_info(stock):
-    labels = ["today's opening price: ", "today's high:", "today's low:"]
-    info = obtain_stock_info(stock)
-
-    return render_template(
-        "get_info_page.html",
-        stock=stock,
-        stats=info,
-        labels=labels,
-    )
-
-
-@app.route("/update_stock_info", methods=["POST"])
-def updatestock():
-    ## get new stock info
-    price = np.random.randint(0, 100)
-
-    ## count time spent on page
-    seconds.value += 1
-    return jsonify("", render_template("table_model.html", stock="SUP", price=price))
-
-
-@app.route("/monitor", methods=["POST"])
-def display_monitor():
-    """ NEED CHANGE: will take input and add to monitor stock dict and then run true_monitor """
-    stock = request.form["stock"]
-    stock_info = obtain_stock_info(stock)
-    monitored_stock[stock] = dict()
-    for label_index, label in enumerate(labels):
-        monitored_stock[stock][label] = stock_info[label_index]
-    # return render_template("sample_table.html", stock="AAPL")
-    return render_template("monitored_info_page.html", stocks=monitored_stock)
-
-
-@app.route("/true_monitor")
+@app.route("/true_monitor", methods=["GET", "POST"])
 def true_monitor():
     """ display monitor list and purchased list """
+    if request.form:
+        new_stock = request.form["stock"]
+        if new_stock not in monitored_stock:
+            monitored_stock.append(new_stock)
+
     for key in monitored_stock:
         [current_open, current_price, current_high, current_low] = obtain_stock_info(
             key
@@ -104,6 +74,8 @@ def true_monitor():
 
 @app.route("/update_monitor", methods=["POST"])
 def update_monitor():
+    # if "stock" in request.form:
+    #     print(request.form)
     for key in monitored_stock:
         [current_open, current_price, current_high, current_low] = obtain_stock_info(
             key
@@ -120,15 +92,20 @@ def display_to_be_created():
     return render_template("to_be_created.html")
 
 
-@app.route("/update_decimal", methods=["POST"])
-def updatedecimal():
-    rando = np.random.rand()
-    return jsonify({"stock": "0", "price": rando})
+# @app.route("/live_data")
+# def display_live_data():
+#     return render_template("live_data.html", index=rando)
 
-
-@app.route("/live_data")
-def display_live_data():
-    return render_template("live_data.html", index=rando)
+# @app.route("/monitor", methods=["POST"])
+# def display_monitor():
+#     """ NEED CHANGE: will take input and add to monitor stock dict and then run true_monitor """
+#     stock = request.form["stock"]
+#     stock_info = obtain_stock_info(stock)
+#     monitored_stock[stock] = dict()
+#     for label_index, label in enumerate(labels):
+#         monitored_stock[stock][label] = stock_info[label_index]
+#     # return render_template("sample_table.html", stock="AAPL")
+#     return render_template("monitored_info_page.html", stocks=monitored_stock)
 
 
 if __name__ == "__main__":

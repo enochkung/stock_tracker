@@ -17,6 +17,8 @@
       <th>Stock</th>
       <th>Price</th>
       <th>Number of Shares</th>
+      <th>Buy</th>
+      <th>Sell</th>
       <!--<th><input type="button" value="new" /></th>-->
     </tr>
 
@@ -25,7 +27,6 @@
 
   <script>
     var myArray = [];
-    // var parsed = JSON.parse("{{mon_dict | tojson}}");
     var parsed = {{mon_dict|tojson}}
     const key = Object.keys(parsed)
     //for (var i = 0; i < 1; i++) {
@@ -46,7 +47,8 @@
     			<td>${data[i].stock}</td>
     			<td>${data[i].price}</td>
     			<td>${data[i].shares}</td>
-                    <td></td>
+          <td><input type='number' name='buy_number'></td>
+          <td><input type='number' name='sell_number'></td>
     	  </tr>`;
         table.innerHTML += row;
       }
