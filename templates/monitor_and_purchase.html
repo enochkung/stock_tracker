@@ -4,7 +4,7 @@
   $(function () {
     window.setInterval(function () {
       loadNewStock();
-    }, 10000);
+    }, 1000);
 
     function loadNewStock() {
       $.ajax({
@@ -39,25 +39,22 @@
       <th>Price</th>
       <th>Number of Shares</th>
       <th>Total Value</th>
-      <th>Buy (shares)</th>
-      <th>Buy ($)</th>
-      <th>Sell (shares)</th>
       <!--<th><input type="button" value="new" /></th>-->
     </tr>
 
     <tbody id="myTable"></tbody>
   </table>
-
   <script>
     var myArray = [];
-    var parsed = {{mon_dict|tojson}}
-    const key = Object.keys(parsed)
+    var mon_dict = {{mon_dict|tojson}}
+    var shares_dict = {{shares_dict|tojson}}
+    const key = Object.keys(mondict)
     //for (var i = 0; i < 1; i++) {
     //  myArray[i] = { stock: "{{stock}}", price: parsed['stock'], shares: "0" };
     //  //{ stock: "Mila", age: "32", birthdate: "10/1/1989" },
     //}
     for (var i = 0; i < key.length; i++){
-        myArray[i] = { stock: key[i], price: parsed[key[i]], shares: "0" };
+        myArray[i] = { stock: key[i], price: mon_dict[key[i]], shares: shares_dict[key[i]] };
     }
 
     buildTable(myArray);
@@ -71,13 +68,6 @@
     			<td>${data[i].price}</td>
     			<td>${data[i].shares}</td>
           <td> calculate value</td>
-          <td>
-            <form action='/true_monitor' method='POST'>
-              <input type='number' name='buy_number'>
-            </form>
-          </td>
-          <td><input type='number' name='buy_price'> </td>
-          <td><input type='number' name='sell_number'></td>
     	  </tr>`;
         table.innerHTML += row;
       }
@@ -99,3 +89,73 @@
     </div>
   </div>
 </form>
+
+<table class="table table-striped">
+  <tr class="bg-info">
+    <th>Stock</th>
+    <th>Buy (shares)</th>
+    <th>Buy ($)</th>
+    <th>Sell (shares)</th>
+    <!--<th><input type="button" value="new" /></th>-->
+  </tr>
+  <form action="/true_monitor" method="POST">
+    <tr>
+      <td><input
+      type="text"
+      name="stock"
+      class="form-control"
+      placeholder="Stock"
+      aria-label="Stock, ETF or Mutual Fund"
+      aria-describedby="basic-addon2"
+    /></td>
+      <td>
+      <div class="input-group mb-3">
+    <input
+      type="text"
+      name="num_shares"
+      class="form-control"
+      placeholder="No. Shares"
+      aria-label="Stock, ETF or Mutual Fund"
+      aria-describedby="basic-addon2"
+    />
+        <button
+          class="btn btn-outline-secondary"
+          type="submit"
+          name="buy_share"
+        >
+          Buy (shares)
+        </button>
+      </td>
+      <td>
+      <div class="input-group mb-3">
+    <input
+      type="text"
+      name="cost_shares"
+      class="form-control"
+      placeholder="£ in shares"
+      aria-label="Stock, ETF or Mutual Fund"
+      aria-describedby="basic-addon2"
+    />
+        <button class="btn btn-outline-secondary" type="submit" name="buy_cost">
+          Buy (£)
+        </button>
+      </td>
+      <td>
+      <div class="input-group mb-3">
+    <input
+      type="text"
+      name="sell_shares"
+      class="form-control"
+      placeholder="No. shares"
+      aria-label="Stock, ETF or Mutual Fund"
+      aria-describedby="basic-addon2"
+    />
+        <button class="btn btn-outline-secondary" type="submit" name="sell">
+          Sell (shares)
+        </button>
+      </td>
+    </tr>
+  </form>
+
+  <tbody id="myTable"></tbody>
+</table>
