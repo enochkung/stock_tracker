@@ -38,8 +38,10 @@
       <th>Stock</th>
       <th>Price</th>
       <th>Number of Shares</th>
-      <th>Buy</th>
-      <th>Sell</th>
+      <th>Total Value</th>
+      <th>Buy (shares)</th>
+      <th>Buy ($)</th>
+      <th>Sell (shares)</th>
       <!--<th><input type="button" value="new" /></th>-->
     </tr>
 
@@ -68,7 +70,13 @@
     			<td>${data[i].stock}</td>
     			<td>${data[i].price}</td>
     			<td>${data[i].shares}</td>
-          <td><input type='number' name='buy_number'></td>
+          <td> calculate value</td>
+          <td>
+            <form action='/true_monitor' method='POST'>
+              <input type='number' name='buy_number'>
+            </form>
+          </td>
+          <td><input type='number' name='buy_price'> </td>
           <td><input type='number' name='sell_number'></td>
     	  </tr>`;
         table.innerHTML += row;

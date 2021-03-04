@@ -5,6 +5,7 @@ from typing import Dict
 import yfinance as yf
 import numpy as np
 from multiprocessing import Value
+from yahoo_fin import stock_info
 
 app = Flask(__name__)
 
@@ -27,11 +28,12 @@ def obtain_stock_info(stock):
     hist = quote.history(period=period, interval=interval)
 
     hist = hist.sort_index(ascending=False)
+
     current_open = hist["Open"][0]
-    current_price = hist["Close"][0]
+    current_price = stock_info.get_live_price(stock)
     current_high = hist["High"][0]
     current_low = hist["Low"][0]
-
+    print("current", current_price)
     return [current_open, current_price, current_high, current_low]
 
 
