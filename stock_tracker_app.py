@@ -15,6 +15,7 @@ monitored_stock = ["AAPL", "HSBC"]
 purchased_stock = dict()
 monitor_stock_price_dict = dict()
 num_stock_purchased_dict = {"AAPL": 0, "HSBC": 0}
+purchase_value_dict = {"AAPL": 0, "HSBC": 0}
 total_value_dict = dict()
 
 rando = np.random.rand()
@@ -69,12 +70,15 @@ def true_monitor():
         action = [
             key for key in request.form if key != "stock" and request.form[key] != ""
         ][0]
+
         if action == "num_shares":
             num_stock_purchased_dict[new_stock] = round(int(request.form[action]), 2)
         elif action == "cost_shares":
             pass
         elif action == "sell_shares":
             pass
+
+        purchase_value_dict[new_stock] = 0
 
     elif "mon_stock" in request.form:
         ## if only add to monitor
@@ -92,12 +96,18 @@ def true_monitor():
         total_value_dict[key] = np.round_(
             current_price * num_stock_purchased_dict[key], 2
         )
+        if "stock" in request.form and request.form["stock"] == key:
+            purchase_value_dict[key] += np.round_(
+                current_price * num_stock_purchased_dict[key], 2
+            )
 
     return render_template(
         "monitor_and_purchase.html",
         mon_dict=monitor_stock_price_dict,
         shares_dict=num_stock_purchased_dict,
+        purch_dict=purchase_value_dict,
         total_val_dict=total_value_dict,
+        color="red",
     )
 
 
@@ -113,12 +123,15 @@ def update_monitor():
         total_value_dict[key] = np.round_(
             current_price * num_stock_purchased_dict[key], 2
         )
+        if "stock" in request.form and request.form["stock"] == key:
+            purchase_value_dict[key] += current_price * num_stock_purchased_dict[key]
     return jsonify(
         "",
         render_template(
             "update_monitor_table.html",
             mon_dict=monitor_stock_price_dict,
             shares_dict=num_stock_purchased_dict,
+            purch_dict=purchase_value_dict,
             total_val_dict=total_value_dict,
         ),
     )
