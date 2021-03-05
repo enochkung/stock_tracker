@@ -30,14 +30,14 @@
     var shares_dict = {{shares_dict|tojson}}
     var purch_dict = {{purch_dict|tojson}}
     var total_val_dict = {{total_val_dict|tojson}}
-
+    var color = {{value_color_dict|tojson}}
     const key = Object.keys(mon_dict)
     //for (var i = 0; i < 1; i++) {
     //  myArray[i] = { stock: "{{stock}}", price: parsed['stock'], shares: "0" };
     //  //{ stock: "Mila", age: "32", birthdate: "10/1/1989" },
     //}
     for (var i = 0; i < key.length; i++){
-        myArray[i] = { stock: key[i], price: mon_dict[key[i]], shares: shares_dict[key[i]], purch_val: purch_dict[key[i]],total_val: total_val_dict[key[i]] };
+        myArray[i] = { stock: key[i], price: mon_dict[key[i]], shares: shares_dict[key[i]], purch_val: purch_dict[key[i]],total_val: total_val_dict[key[i]], col:color[key[i]]};
     }
 
     buildTable(myArray);
@@ -51,7 +51,7 @@
     			<td width="10%">${data[i].price}</td>
     			<td>${data[i].shares}</td>
           <td> ${data[i].purch_val} </td>
-          <td width="15%" style="color:red">${data[i].total_val}</td>
+          <td width="15%" style="color:${data[i].col}"> ${data[i].total_val}</td>
     	  </tr>`;
         table.innerHTML += row;
       }

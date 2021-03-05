@@ -17,6 +17,7 @@ monitor_stock_price_dict = dict()
 num_stock_purchased_dict = {"AAPL": 0, "HSBC": 0}
 purchase_value_dict = {"AAPL": 0, "HSBC": 0}
 total_value_dict = dict()
+value_color_dict = dict()
 
 rando = np.random.rand()
 
@@ -72,7 +73,9 @@ def true_monitor():
         ][0]
 
         if action == "num_shares":
-            num_stock_purchased_dict[new_stock] = round(int(request.form[action]), 2)
+            if new_stock not in num_stock_purchased_dict:
+                num_stock_purchased_dict[new_stock] = 0
+            num_stock_purchased_dict[new_stock] += round(int(request.form[action]), 2)
         elif action == "cost_shares":
             pass
         elif action == "sell_shares":
@@ -101,13 +104,18 @@ def true_monitor():
                 current_price * num_stock_purchased_dict[key], 2
             )
 
+        if total_value_dict[key] >= purchase_value_dict[key]:
+            value_color_dict[key] = "green"
+        else:
+            value_color_dict[key] = "red"
+
     return render_template(
         "monitor_and_purchase.html",
         mon_dict=monitor_stock_price_dict,
         shares_dict=num_stock_purchased_dict,
         purch_dict=purchase_value_dict,
         total_val_dict=total_value_dict,
-        color="red",
+        value_color_dict=value_color_dict,
     )
 
 
@@ -125,6 +133,11 @@ def update_monitor():
         )
         if "stock" in request.form and request.form["stock"] == key:
             purchase_value_dict[key] += current_price * num_stock_purchased_dict[key]
+
+        if total_value_dict[key] >= purchase_value_dict[key]:
+            value_color_dict[key] = "green"
+        else:
+            value_color_dict[key] = "red"
     return jsonify(
         "",
         render_template(
@@ -133,6 +146,7 @@ def update_monitor():
             shares_dict=num_stock_purchased_dict,
             purch_dict=purchase_value_dict,
             total_val_dict=total_value_dict,
+            value_color_dict=value_color_dict,
         ),
     )
 
