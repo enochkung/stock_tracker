@@ -14,7 +14,7 @@ labels = ["today's opening price: ", "today's high:", "today's low:"]
 monitored_stock = ["AAPL", "HSBC"]
 purchased_stock = dict()
 monitor_stock_price_dict = dict()
-num_stock_purchased_dict = {"AAPL": "0", "HSBC": "0"}
+num_stock_purchased_dict = {"AAPL": 0, "HSBC": 0}
 total_value_dict = dict()
 
 rando = np.random.rand()
@@ -70,23 +70,34 @@ def true_monitor():
             key for key in request.form if key != "stock" and request.form[key] != ""
         ][0]
         if action == "num_shares":
-            num_stock_purchased_dict[new_stock] = request.form[action]
+            num_stock_purchased_dict[new_stock] = round(int(request.form[action]), 2)
         elif action == "cost_shares":
             pass
         elif action == "sell_shares":
             pass
+
+    elif "mon_stock" in request.form:
+        ## if only add to monitor
+        new_stock = request.form["mon_stock"]
+        monitored_stock.append(new_stock)
+        ## stock is not yet bought so set number of stock to zero
+        num_stock_purchased_dict[new_stock] = 0
 
     ## get current information of the stocks
     for key in monitored_stock:
         [current_open, current_price, current_high, current_low] = obtain_stock_info(
             key
         )
-        monitor_stock_price_dict[key] = round(current_price, 4)
+        monitor_stock_price_dict[key] = np.round_(current_price, 2)
+        total_value_dict[key] = np.round_(
+            current_price * num_stock_purchased_dict[key], 2
+        )
 
     return render_template(
         "monitor_and_purchase.html",
         mon_dict=monitor_stock_price_dict,
         shares_dict=num_stock_purchased_dict,
+        total_val_dict=total_value_dict,
     )
 
 
@@ -98,13 +109,17 @@ def update_monitor():
         [current_open, current_price, current_high, current_low] = obtain_stock_info(
             key
         )
-        monitor_stock_price_dict[key] = round(current_price, 4)
+        monitor_stock_price_dict[key] = np.round_(current_price, 2)
+        total_value_dict[key] = np.round_(
+            current_price * num_stock_purchased_dict[key], 2
+        )
     return jsonify(
         "",
         render_template(
             "update_monitor_table.html",
             mon_dict=monitor_stock_price_dict,
             shares_dict=num_stock_purchased_dict,
+            total_val_dict=total_value_dict,
         ),
     )
 

@@ -17,6 +17,7 @@
       <th>Stock</th>
       <th>Price</th>
       <th>Number of Shares</th>
+      <th>Value at Purchase</th>
       <th>Total Value</th>
       <!--<th><input type="button" value="new" /></th>-->
     </tr>
@@ -27,13 +28,14 @@
     var myArray = [];
     var mon_dict = {{mon_dict|tojson}}
     var shares_dict = {{shares_dict|tojson}}
+    var total_val_dict = {{total_val_dict|tojson}}
     const key = Object.keys(mon_dict)
     //for (var i = 0; i < 1; i++) {
     //  myArray[i] = { stock: "{{stock}}", price: parsed['stock'], shares: "0" };
     //  //{ stock: "Mila", age: "32", birthdate: "10/1/1989" },
     //}
     for (var i = 0; i < key.length; i++){
-        myArray[i] = { stock: key[i], price: mon_dict[key[i]], shares: shares_dict[key[i]] };
+        myArray[i] = { stock: key[i], price: mon_dict[key[i]], shares: shares_dict[key[i]], total_val: total_val_dict[key[i]] };
     }
 
     buildTable(myArray);
@@ -43,10 +45,11 @@
 
       for (var i = 0; i < data.length; i++) {
         var row = `<tr>
-    			<td>${data[i].stock}</td>
-    			<td>${data[i].price}</td>
+    			<td width="10%">${data[i].stock}</td>
+    			<td width="10%">${data[i].price}</td>
     			<td>${data[i].shares}</td>
-          <td> calculate value</td>
+          <td> to be calc </td>
+          <td width="15%">${data[i].total_val}</td>
     	  </tr>`;
         table.innerHTML += row;
       }
