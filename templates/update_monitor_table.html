@@ -6,6 +6,44 @@
     crossorigin="anonymous"
   />
 
+<table class="table table-striped">
+  <tr class="bg-info">
+    <th width="10%">Free Funds</th>
+    <th width="30%"></th>
+    <th>Invested</th>
+    <th>Portfolio</th>
+    <th>Return</th>
+    <!--<th><input type="button" value="new" /></th>-->
+  </tr>
+  <form action="/true_monitor" method="POST">
+    <tr>
+      <td></td>
+      <td>
+      <div class="input-group mb-3">
+    <input
+      type="text"
+      name="num_shares"
+      class="form-control"
+      placeholder="Add to Funds (£)"
+      aria-label="Stock, ETF or Mutual Fund"
+      aria-describedby="basic-addon2"
+    />
+        <button
+          class="btn btn-outline-secondary"
+          type="submit"
+          name="Add"
+        >
+          Add
+        </button>
+      </td>
+      <td></td>
+      <td></td>
+    </tr>
+  </form>
+
+  <tbody id="mymoney"></tbody>
+</table>
+
   <style>
     th {
       color: #fff;
@@ -51,7 +89,7 @@
     			<td width="10%">${data[i].price}</td>
     			<td>${data[i].shares}</td>
           <td> ${data[i].purch_val} </td>
-          <td width="15%" style="color:${data[i].col}"> ${data[i].total_val}</td>
+          <td width="15%" style="background-color:${data[i].col}; color:white"> ${data[i].total_val}</td>
     	  </tr>`;
         table.innerHTML += row;
       }

@@ -9,19 +9,27 @@ from yahoo_fin import stock_info
 
 app = Flask(__name__)
 
-monitored_stock: Dict[str, Dict[str, float]] = dict()
-labels = ["today's opening price: ", "today's high:", "today's low:"]
-monitored_stock = ["AAPL", "HSBC"]
-purchased_stock = dict()
-monitor_stock_price_dict = dict()
-num_stock_purchased_dict = {"AAPL": 0, "HSBC": 0}
-purchase_value_dict = {"AAPL": 0, "HSBC": 0}
-total_value_dict = dict()
-value_color_dict = dict()
 
 rando = np.random.rand()
 
 seconds = Value("i", 0)
+
+
+def initate_dicts_and_constants():
+    global monitored_stock, labels, monitored_stock, purchased_stock, monitor_stock_price_dict, num_stock_purchased_dict, purchase_value_dict, purchase_value_dict, total_value_dict, value_color_dict, free_funds, invested, portfolio, returns
+    monitored_stock = dict()
+    labels = ["today's opening price: ", "today's high:", "today's low:"]
+    monitored_stock = ["AAPL", "HSBC"]
+    purchased_stock = dict()
+    monitor_stock_price_dict = dict()
+    num_stock_purchased_dict = {"AAPL": 0, "HSBC": 0}
+    purchase_value_dict = {"AAPL": 0, "HSBC": 0}
+    total_value_dict = dict()
+    value_color_dict = dict()
+    free_funds = 100000
+    invested = 0
+    portfolio = 0
+    returns = portfolio - invested
 
 
 def obtain_stock_info(stock):
@@ -61,10 +69,13 @@ def display_stock_info():
 def true_monitor():
     """ display monitor list and purchased list """
 
+    ## initiate needed dictionarys and constants
+    initate_dicts_and_constants()
     ## if request.form contains bought stock
     if "stock" in request.form:
         # get stock abbrev.
         new_stock = request.form["stock"]
+        # if stock is not already monitored, add to monitored stock list
         if new_stock not in monitored_stock:
             monitored_stock.append(new_stock)
         # get whether buy or sell, and if buy whether in shares or cost
@@ -73,13 +84,29 @@ def true_monitor():
         ][0]
 
         if action == "num_shares":
+            # if action is in number of shares, then initiate stock in num_stock_purchased_dict at 0 stocks
             if new_stock not in num_stock_purchased_dict:
                 num_stock_purchased_dict[new_stock] = 0
-            num_stock_purchased_dict[new_stock] += round(int(request.form[action]), 2)
+            # add the number of stocks to be purchased to already recorded number, whether 0 or non-0
+            num_stock_purchased_dict[new_stock] += int(request.form[action])
         elif action == "cost_shares":
-            pass
+            # if action is in amount of shares by cost, then using current price, translate to number of shares
+            shares_in_cost = float(request.form[action])
+            stock_live_price = stock_info.get_live_price(new_stock)
+            if new_stock not in num_stock_purchased_dict:
+                num_stock_purchased_dict[new_stock] = 0
+            # add the number of stocks to be purchased to already recorded number, whether 0 or non-0
+            num_of_shares = shares_in_cost // stock_live_price
+            num_stock_purchased_dict[new_stock] += int(
+                shares_in_cost // stock_live_price
+            )
         elif action == "sell_shares":
-            pass
+            # if action is sell number of shares, remove amount from num_stock_purchased_dict
+            if new_stock in num_stock_purchased_dict:
+                num_shares_sold = int(request.form[action])
+                num_stock_purchased_dict[new_stock] = max(
+                    num_stock_purchased_dict[new_stock] - num_shares_sold, 0
+                )
 
         purchase_value_dict[new_stock] = 0
 
@@ -103,14 +130,26 @@ def true_monitor():
             purchase_value_dict[key] += np.round_(
                 current_price * num_stock_purchased_dict[key], 2
             )
+            free_funds -= np.round_(current_price * num_stock_purchased_dict[key], 2)
 
-        if total_value_dict[key] >= purchase_value_dict[key]:
+        if total_value_dict[key] > purchase_value_dict[key]:
             value_color_dict[key] = "green"
+        elif total_value_dict[key] == purchase_value_dict[key]:
+            value_color_dict[key] = "grey"
         else:
             value_color_dict[key] = "red"
 
+    portfolio = sum(total_value_dict.values())
+    try:
+        returns = str(round((portfolio - invested) / invested * 100, 2)) + "%"
+    except:
+        returns = "0%"
+
     return render_template(
-        "monitor_and_purchase.html",
+        funds=free_funds,
+        invested=invested,
+        portfolio=portfolio,
+        returns=returns,
         mon_dict=monitor_stock_price_dict,
         shares_dict=num_stock_purchased_dict,
         purch_dict=purchase_value_dict,
@@ -134,14 +173,32 @@ def update_monitor():
         if "stock" in request.form and request.form["stock"] == key:
             purchase_value_dict[key] += current_price * num_stock_purchased_dict[key]
 
-        if total_value_dict[key] >= purchase_value_dict[key]:
+        if total_value_dict[key] > purchase_value_dict[key]:
             value_color_dict[key] = "green"
+        elif total_value_dict[key] == purchase_value_dict[key]:
+            value_color_dict[key] = "grey"
         else:
             value_color_dict[key] = "red"
+
+    portfolio = sum(total_value_dict.values())
+    try:
+        import pdb
+
+        pdb.set_trace()
+        returns = str(round((portfolio - invested) / invested * 100, 2)) + "%"
+    except:
+        returns = "0%"
+    import pdb
+
+    pdb.set_trace()
     return jsonify(
         "",
         render_template(
             "update_monitor_table.html",
+            funds=free_funds,
+            invested=invested,
+            portfolio=portfolio,
+            returns=returns,
             mon_dict=monitor_stock_price_dict,
             shares_dict=num_stock_purchased_dict,
             purch_dict=purchase_value_dict,
