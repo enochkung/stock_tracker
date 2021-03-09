@@ -17,7 +17,7 @@
   </tr>
   <form action="/true_monitor" method="POST">
     <tr>
-      <td></td>
+      <td style=" font-size: 30px">{{top_level['free_funds']}}</td>
       <td>
       <div class="input-group mb-3">
     <input
@@ -36,8 +36,9 @@
           Add
         </button>
       </td>
-      <td></td>
-      <td></td>
+      <td style=" font-size: 30px">{{top_level['invested']}}</td>
+      <td style=" font-size: 30px">{{top_level['portfolio']}}</td>
+      <td style=" font-size: 30px">{{top_level['return']}}</td>
     </tr>
   </form>
 
@@ -55,7 +56,7 @@
       <th>Stock</th>
       <th>Price</th>
       <th>Number of Shares</th>
-      <th>Value at Purchase</th>
+      <th>Total Value at Purchase</th>
       <th>Total Value</th>
       <!--<th><input type="button" value="new" /></th>-->
     </tr>
