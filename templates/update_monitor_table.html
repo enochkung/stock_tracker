@@ -6,44 +6,26 @@
     crossorigin="anonymous"
   />
 
-<table class="table table-striped">
-  <tr class="bg-info">
-    <th width="10%">Free Funds</th>
-    <th width="30%"></th>
-    <th>Invested</th>
-    <th>Portfolio</th>
-    <th>Return</th>
-    <!--<th><input type="button" value="new" /></th>-->
-  </tr>
-  <form action="/true_monitor" method="POST">
-    <tr>
-      <td style=" font-size: 30px">{{top_level['free_funds']}}</td>
-      <td>
-      <div class="input-group mb-3">
-    <input
-      type="text"
-      name="num_shares"
-      class="form-control"
-      placeholder="Add to Funds (£)"
-      aria-label="Stock, ETF or Mutual Fund"
-      aria-describedby="basic-addon2"
-    />
-        <button
-          class="btn btn-outline-secondary"
-          type="submit"
-          name="Add"
-        >
-          Add
-        </button>
-      </td>
-      <td style=" font-size: 30px">{{top_level['invested']}}</td>
-      <td style=" font-size: 30px">{{top_level['portfolio']}}</td>
-      <td style=" font-size: 30px">{{top_level['return']}}</td>
+  <table class="table table-striped">
+    <tr class="bg-info">
+      <th width="10%">Free Funds</th>
+      <th>Invested</th>
+      <th>Portfolio</th>
+      <th>Return</th>
+      <th width="30%" style="color: blue">Commission</th>
+      <!--<th><input type="button" value="new" /></th>-->
     </tr>
-  </form>
+    <tr>
+      <td style="font-size: 30px">{{top_level['free_funds']}}</td>
 
-  <tbody id="mymoney"></tbody>
-</table>
+      <td style="font-size: 30px">{{top_level['invested']}}</td>
+      <td style="font-size: 30px">{{top_level['portfolio']}}</td>
+      <td style="font-size: 30px">{{top_level['return']}}</td>
+      <td></td>
+    </tr>
+
+    <tbody id="mymoney"></tbody>
+  </table>
 
   <style>
     th {
