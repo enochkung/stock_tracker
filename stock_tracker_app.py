@@ -1,6 +1,8 @@
 ## stock tracker
 
 from flask import Flask, request, render_template, redirect, url_for, jsonify
+from flask_bootstrap import Bootstrap
+from flask_wtf import FlaskForm
 from typing import Dict
 import yfinance as yf
 import numpy as np
@@ -45,8 +47,8 @@ def obtain_stock_info(stock):
 @app.route("/")
 @app.route("/home")
 def display_home():
-    # return render_template("tracker_homepage.html")
-    return redirect(url_for("true_monitor"))
+    return render_template("login.html")
+    # return redirect(url_for("true_monitor"))
 
 
 @app.route("/stock_info", methods=["POST"])
@@ -159,6 +161,10 @@ def buy_or_sell_shares(new_stock):
             num_stock_purchased_dict[new_stock] = 0
         # add the number of stocks to be purchased to already recorded number, whether 0 or non-0
         num_stock_purchased_dict[new_stock] += int(request.form[action])
+        stock_live_price = stock_info.get_live_price(new_stock)
+        top_level_info["free_funds"] -= np.round_(
+            stock_live_price * int(request.form[action]), 2
+        )
     elif action == "cost_shares":
         # if action is in amount of shares by cost, then using current price, translate to number of shares
         shares_in_cost = float(request.form[action])
@@ -168,6 +174,7 @@ def buy_or_sell_shares(new_stock):
         # add the number of stocks to be purchased to already recorded number, whether 0 or non-0
         num_of_shares = shares_in_cost // stock_live_price
         num_stock_purchased_dict[new_stock] += int(shares_in_cost // stock_live_price)
+        top_level_info["free_funds"] -= stock_live_price * num_of_shares
     elif action == "sell_shares":
         # if action is sell number of shares, remove amount from num_stock_purchased_dict
         if new_stock in num_stock_purchased_dict:
@@ -175,6 +182,8 @@ def buy_or_sell_shares(new_stock):
             num_stock_purchased_dict[new_stock] = max(
                 num_stock_purchased_dict[new_stock] - num_shares_sold, 0
             )
+            stock_live_price = stock_info.get_live_price(new_stock)
+            top_level_info["free_funds"] += stock_live_price * num_shares_sold
 
     purchase_value_dict[new_stock] = 0.0
 
@@ -226,7 +235,6 @@ def update_top_level_initial():
         top_level_info["return"] = "0%"
 
     top_level_info["invested"] = np.round_(sum(purchase_value_dict.values()), 2)
-    top_level_info["free_funds"] -= top_level_info["invested"]
 
 
 def update_top_level_portfolio():
