@@ -47,8 +47,8 @@ def obtain_stock_info(stock):
 @app.route("/")
 @app.route("/home")
 def display_home():
-    return render_template("login.html")
-    # return redirect(url_for("true_monitor"))
+    # return render_template("login.html")
+    return redirect(url_for("true_monitor"))
 
 
 @app.route("/stock_info", methods=["POST"])

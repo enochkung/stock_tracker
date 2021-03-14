@@ -1,3 +1,84 @@
-{%extends "base.html"%} {% block title%}Home Page{%endblock%} {%block content%}
-<h1>Test</h1>
+<style>
+  .floatWrap {
+    width: 100%;
+  }
+
+  .floatCol {
+    float: left;
+    box-sizing: border-box;
+    width: 33.3%;
+    padding: 25px;
+    background: #ffffff;
+  }
+  /* (B) CLEARFIX - FLOATWRAP TO "MAINTAIN" 100% WIDTH */
+  .floatWrap {
+    overflow: auto;
+  }
+  .floatWrap::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+  /* (C) 1 COLUMN ON SMALL SCREENS */
+  @media only screen and (max-width: 768px) {
+    .floatCol {
+      float: none;
+      display: block;
+      width: 100%;
+    }
+  }
+</style>
+
+{%extends "base.html"%} {% block title%}Home Page{%endblock%} {%block name%}
+Investment Tracker {%endblock%} {%block content%}
+<div class="floatWrap">
+  <div class="container">
+    <!--<div class="form-floating mb-3">-->
+    <div
+      class="floatCol"
+      style="background-color: white; border: 6px solid #8673bb"
+    >
+      <h1 style="margin-bottom: 1cm">Sign in</h1>
+      <input
+        type="email"
+        class="form-control"
+        id="floatingInput"
+        placeholder="Username"
+        style="margin-bottom: 0.3cm"
+      />
+      <!--<label for="floatingInput">Username</label>-->
+      <!--<div class="form-floating">-->
+      <input
+        type="password"
+        class="form-control"
+        id="floatingPassword"
+        placeholder="Password"
+      />
+      <!--<label for="floatingPassword">Password</label>-->
+    </div>
+    <div class="floatCol"></div>
+    <div
+      class="floatCol"
+      style="background-color: white; border: 6px solid #8673bb"
+    >
+      <h1 style="margin-bottom: 1cm">Sign Up</h1>
+      <input
+        type="email"
+        class="form-control"
+        id="floatingInput"
+        placeholder="Username"
+        style="margin-bottom: 0.3cm"
+      />
+      <!--<label for="floatingInput">Username</label>-->
+      <!--<div class="form-floating">-->
+      <input
+        type="password"
+        class="form-control"
+        id="floatingPassword"
+        placeholder="Password"
+      />
+      <!--<label for="floatingPassword">Password</label>-->
+    </div>
+  </div>
+</div>
 {%endblock%}
