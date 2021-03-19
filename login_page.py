@@ -31,9 +31,7 @@ def login():
         passw = request.form["password"]
 
         login = user.query.filter_by(username=uname, password=passw).first()
-        import pdb
 
-        pdb.set_trace()
         if login is not None:
             return render_template("to_be_created.html")
             # return redirect(url_for("login_prompt"))
@@ -48,7 +46,14 @@ def signup():
 @app.route("/create_account", methods=["GET", "POST"])
 def create_account():
     if request.method == "POST":
+
         uname = request.form["reg_username"]
+
+        ## if uname is already used, then raise warning
+        login = user.query.filter_by(username=uname)
+        if login is not None:
+            return render_template("to_be_created.html")
+
         passw = request.form["reg_password"]
         retype_passw = request.form["reg_retype_password"]
 
