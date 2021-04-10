@@ -47,8 +47,8 @@ def obtain_stock_info(stock):
 @app.route("/")
 @app.route("/home")
 def display_home():
-    # return render_template("login.html")
-    return redirect(url_for("true_monitor"))
+    return render_template("login.html")
+    # return redirect(url_for("true_monitor"))
 
 
 @app.route("/stock_info", methods=["POST"])
@@ -130,6 +130,13 @@ def update_monitor():
         ),
     )
 
+@app.route("/signup")
+def signup():
+    return redirect((url_for("display_to_be_created")))
+
+@app.route("/login", methods=['POST'])
+def login():
+    return redirect((url_for("display_to_be_created")))
 
 @app.route("/to_be_created")
 def display_to_be_created():
