@@ -7,6 +7,7 @@ import numpy as np
 from multiprocessing import Value
 from yahoo_fin import stock_info
 
+# TESTING FORCE PUSH
 app = Flask(__name__)
 
 
